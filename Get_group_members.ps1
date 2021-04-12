@@ -1,0 +1,1 @@
+﻿Get-ADgroupmember -identity “group 1” | get-aduser -property displayname, mail | select name, displayname, samaccountname, mail | Export-CSV "path"
