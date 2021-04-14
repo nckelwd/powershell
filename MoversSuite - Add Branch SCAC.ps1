@@ -9,9 +9,16 @@ If(!(test-path $savePath))
 $orig_File = "C:\Users\$env:username\desktop\MoversSuite - Add a Managed SCAC Branch to MoversSuite.sql"
 $source_file = "$savePath\Add-MIL-Branch.sql"
 
+$insertSecProf = "C:\Users\$env:username\desktop\MoversSuite - Insert Branch into SecProfileDetail with copied access.sql"
+$sourceInsertSecProf = "$savePath\Add-SecProf.sql"
+
+$insertBranchList = "C:\Users\$env:username\desktop\MoversSuite - Add Branch to Personnel Records with specified default Branch.sql"
+$sourceInsertBranchList = "$savePath\Add-BranchList.sql"
+
+
 ###Function - Add MIL Branch to MoversSuite
 Function AddBranch-MIL {
-Copy-Item $orig_file -Destination "$savePath\Add-MIL-Branch.sql"
+Copy-Item $orig_file -Destination $source_file
 
 $source_file
 
@@ -42,16 +49,59 @@ RUN IT!!!!!!!!!!!!!!!!!
 
 
 ###Function - Rename file
-Function FileRename {
+Function FileRenameBranch {
 
 $date=(get-date -Format d) -replace("/")
 $time=(get-date -Format t) -replace(":")
 
 $source_file
 
-$new_file = $SCAC+"_"+"MIL"+"_"+$AgentNum+"_"+"$date"+"_"+"$time"+"-[$env:Computername].sql"
+$final_branch_file = $SCAC+"_"+"MIL"+"_"+$AgentNum+"_"+"$date"+"_"+"$time"+"-[$env:Computername].sql"
 
-Rename-Item $source_file -NewName $new_file
+Rename-Item $source_file -NewName $final_branch_file
+}
+
+
+###Function - Add MIL Branch to Security Profiles
+Function AddSecProf-MIL {
+Copy-Item $insertSecProf -Destination $sourceInsertSecProf
+
+$sourceInsertSecProf
+
+$SQLVarAgentNum = '9979'
+
+(Get-Content $sourceInsertSecProf) | ForEach-Object { $_ -replace $SQLVarAgentNum,$AgentNum} | Set-Content $sourceInsertSecProf
+}
+
+###Function - Rename file
+Function FileRenameSecProf {
+
+$sourceInsertSecProf
+
+$final_secprof_file = $SCAC+"_"+"MIL"+"_"+$AgentNum+"_"+"SecurityProfile"+"-[$env:Computername].sql"
+
+Rename-Item $sourceInsertSecProf -NewName $final_secprof_file
+}
+
+###Function - Add MIL Branch to Branch list
+Function AddBranchList-MIL {
+Copy-Item $insertBranchList -Destination $sourceInsertBranchList
+
+$sourceInsertBranchList
+
+$SQLVarAgentNum = '9979'
+
+(Get-Content $sourceInsertBranchList) | ForEach-Object { $_ -replace $SQLVarAgentNum,$AgentNum} | Set-Content $sourceInsertBranchList
+}
+
+###Function - Rename file
+Function FileRenameBranchList {
+
+$sourceInsertBranchList
+
+$final_branchlist_file = $SCAC+"_"+"MIL"+"_"+$AgentNum+"_"+"AddToBranchList"+"-[$env:Computername].sql"
+
+Rename-Item $sourceInsertBranchList -NewName $final_branchlist_file
 }
 
 <#
@@ -155,7 +205,11 @@ $ButtonOK.Add_Click({$AgentNum = $AgencyNumberBox.Text
                     $SCAC = $SCACCodeBox.Text
                     $BranchGL = $BranchGLCodeBox.Text
                     AddBranch-MIL
-                    FileRename
+                    FileRenameBranch
+                    AddSecProf-MIL
+                    FileRenameSecProf
+                    AddBranchList-MIL
+                    FileRenameBranchList
                     })
 $ButtonCANCEL.Add_Click({$terminateScript = $true 
                     $Form.Close()
