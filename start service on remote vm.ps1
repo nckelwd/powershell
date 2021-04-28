@@ -1,0 +1,1 @@
+﻿get-service -name RemoteRegistry -ComputerName x | Start-Service
