@@ -1,1 +1,6 @@
-﻿Get-ADgroupmember -identity “group 1” | get-aduser -property displayname, mail | select name, displayname, samaccountname, mail | Export-CSV "path"
+﻿Get-ADgroupmember -identity “” | get-aduser -property displayname, mail | select name, displayname, samaccountname, mail 
+
+
+
+git config --global user.email "elwoodn@me.com"
+git config --global user.name "Nick Elwood"
