@@ -1,0 +1,1 @@
+﻿Get-ADComputer -Filter * -Properties Name, SAMAccountName, lastLogonDate, DNSHostName, DistinguishedName, Enabled | Export-CSV "C:\Scripts\ADCompAuditLastLogon.csv"
