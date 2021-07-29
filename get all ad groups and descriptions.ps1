@@ -8,10 +8,10 @@ Import-Csv $savePAth
 $Results = @()
 
 foreach ($G in $Groups) {
-    $num = Get-ADGroupMember -Identity $G.SamAccountName
+    $num = (Get-ADGroup -Properties *).Member.Count
     ##Write-Host "the group" $g.SamAccountName "has" $num.count "users"
-    ##$Export  | Add-Member -MemberType NoteProperty -Name $g -Value $num.count
-    $G | Add-Member -MemberType NoteProperty -Name "UserCount" -Value $num.count
+    ##$G | Add-Member -MemberType NoteProperty -Name $g -Value $num.count
+    $G | Add-Member -MemberType NoteProperty -Name "UserCount" -Value $g.$num
     $Results += $G
 }
 

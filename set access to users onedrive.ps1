@@ -1,6 +1,6 @@
 $adminSiteURL = "https://aprenergyholdingslimited-admin.sharepoint.com"
 
-$O365UsernameofSharingUser = "mary.zachoulitou@aprenergy.com"
+$O365UsernameofSharingUser = "jennet.orasheva@aprenergy.com"
 
 $UsertoGrantAccessTo = "nicholas.elwood@aprenergy.com"
 

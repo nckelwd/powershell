@@ -59,21 +59,23 @@ $TextBox_LastName.location       = New-Object System.Drawing.Point(190,75)
 $TextBox_LastName.Font           = 'Microsoft Sans Serif,10'
 
 #Username
-$TextBox_UserName                = New-Object system.Windows.Forms.Label
-$TextBox_UserName.text           = ""
-#$TextBox_UserName.multiline      = $false
+$TextBox_UserName                = New-Object system.Windows.Forms.TextBox
+#$TextBox_UserName.text           = ""
+$TextBox_UserName.multiline      = $false
 $TextBox_UserName.width          = 200
 $TextBox_UserName.height         = 20
 $TextBox_UserName.location       = New-Object System.Drawing.Point(190,117)
 $TextBox_UserName.Font           = 'Microsoft Sans Serif,10'
 
 #Set username
+<#
 $TextBox_FirstName.Add_Validating({
     $TextBox_UserName.Text = $TextBox_FirstName.Text.Substring(0,1) + $TextBox_LastName.Text
 })
 $TextBox_LastName.Add_Validating({
     $TextBox_UserName.Text = $TextBox_FirstName.Text.Substring(0,1) + $TextBox_LastName.Text
 })
+#>
 
 <# For FirstName.LastName
 $TextBox_FirstName.Add_Validating({
@@ -362,6 +364,8 @@ $Button_GO.Add_Click({createUserButtonClick})
 $Button_Cancel.Add_Click({$Form.Close()})
 #$Button_SetExpDateto90.Add_Click({90daybuttonclick})
 
+<#
+
 function createUserButtonClick 
 {        
     #Set Status Label
@@ -399,12 +403,12 @@ function createUserButtonClick
 
     $TicketNumber = $TextBox_TicketNum.text
     $UserCreator = $env:USERNAME
-    #$date = get-date
+    $date = get-date
     #$90FromToday = (Get-Date).adddays(90)
     $Path
     $LogonScript
     $Groups = New-Object System.Collections.Generic.List[System.Object]
-    $TempPW = ConvertTo-SecureString "Mist3mp!2345678" -AsPlainText -Force
+    $TempPW = ConvertTo-SecureString "Welcome1!" -AsPlainText -Force
     $result = New-Object System.Collections.Generic.List[System.Object]
     $server = "aprjaxdc02.aprenergy.local"
 
@@ -414,7 +418,7 @@ function createUserButtonClick
     #Check to see if username already in use
     try 
     {
-        Get-ADUser -Identity $Username
+        Get-ADUser -Identity $Username -Server $server
         $UserExistsCheck = $true
     }
     catch [Microsoft.ActiveDirectory.Management.ADIdentityResolutionException] 
@@ -425,7 +429,7 @@ function createUserButtonClick
     #Check to see if Manager Exists
     try 
     {
-        Get-ADUser -Identity $Manager
+        Get-ADUser -Identity $Manager -Server $server
         $ManagerExistsCheck = $true
     }
     catch [Microsoft.ActiveDirectory.Management.ADIdentityResolutionException] 
@@ -510,7 +514,7 @@ function createUserButtonClick
         ###################################
         #Verify Accounts Exist#############
         ###################################
-        $FinalUserExistsCheck = [bool] (get-aduser -Filter{ Samaccountname -eq $username})
+        $FinalUserExistsCheck = [bool] (get-aduser -Filter{ Samaccountname -eq $username} -server $server)
 
         if(!$FinalUserExistsCheck)
         {
@@ -535,7 +539,7 @@ function createUserButtonClick
         $out | Add-Member -MemberType NoteProperty -Name "EmployeeID" -Value $EmployeeID
         $result.Add($out)
 
-        $result | Export-Csv -Path "C:\AUTOMATION_SCRIPTS\UserOnboarding\OnboardingLog.csv" -NoTypeInformation -Append
+        $result | Export-Csv -Path "C:\Scripts\OnboardingLog.csv" -NoTypeInformation -Append
     }
 
     
@@ -548,5 +552,6 @@ function createUserButtonClick
 #    $Cal_DateTimePicker.Value = $90FromToday
 #}
 
+#>
 
 [void]$Form.ShowDialog()
