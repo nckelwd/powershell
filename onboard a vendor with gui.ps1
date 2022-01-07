@@ -363,7 +363,7 @@ function theMagic {
     #This Section updates user infomration based on Office location. It adds groups and sets the Path.#
     ###################################################################################################
 
-    $Path = 'OU=NON-MAIL-ENABLED-Accts,DC=aprenergy,DC=local'
+    $Path = 'OU=Vendors,DC=aprenergy,DC=local'
 
     ######################################################################################
     #This Section assigns attributes based on domain.  Adds groups.#
@@ -374,7 +374,7 @@ function theMagic {
     #############
     #Create User#
     #############
-    New-aduser -name $FullName -GivenName $FirstName -surname $LastName -DisplayName $FullName -Description $UserDescription -EmailAddress $VEmailAddress -Manager $Manager -path $path -samaccountname $username -UserPrincipalname $userPrinName -accountPassword $TempPW -enabled $True -title $Title -Office $Office -Company $Company -Department $Department -EmployeeID $EmployeeID -OtherAttributes @{employeeType=$EmpType} -Server $server
+    New-aduser -name $FullName -GivenName $FirstName -surname $LastName -DisplayName $FullName -Description $UserDescription -EmailAddress $VEmailAddress -Manager $Manager -path $path -samaccountname $username -UserPrincipalname $userPrinName -accountPassword $TempPW -enabled $True -title $UserDescription -Office $Office -Company $Company -Department $Department -EmployeeID $EmployeeID -OtherAttributes @{employeeType=$EmpType} -Server $server
 
     Start-Sleep -Seconds 10
 
