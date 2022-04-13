@@ -23,10 +23,21 @@ $userEmails = {"marco.castillo@aprenergy.com",
 "nilo.vasquez@aprenergy.com",
 "jorge.pimentel@aprenergy.com"}
 #>
-
+<#
 $userEmails = ("mario.barajas@aprenergy.com",
 "roberto.blanco@aprenergy.com")
+#>
 
+$userEmails = (
+"marco.castillo@aprenergy.com",
+"richard.chavez@aprenergy.com",
+"jeron.derama@aprenergy.com",
+"wilmar.gomez@aprenergy.com",
+"medardo.hernandez@aprenergy.com",
+"yamil.jeran.ortega@aprenergy.com",
+"nirson.toj@aprenergy.com",
+"jorge.pimentel@aprenergy.com"
+)
 
 foreach ($u in $userEmails) {
 Add-MailboxPermission -Identity $u -User "Carlos.Alvarez@aprenergy.com" -AccessRights FullAccess -InheritanceType All -Automapping $false
