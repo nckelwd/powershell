@@ -7,7 +7,8 @@
 #some variables
 #######################################################################################################################################################
 $server = "aprjaxdc02.aprenergy.local"
-$Path = 'CN=Managed Service Accounts,DC=aprenergy,DC=local'
+$pathType = @()
+#$Path = 'OU=Service Accounts,OU=NonSynced,OU=Users,OU=Global,OU=APR,DC=aprenergy,DC=local'
 $accountType = @()
 $userCreator = $env:USERNAME
 $date = get-date
@@ -83,6 +84,26 @@ $managerPrompt = Read-Host -Prompt "Is this correct? Enter Y to continue or any 
     }
 
 #######################################################################################################################################################
+#sets the manager
+#######################################################################################################################################################
+
+$pathType = Read-Host -Prompt "Will this account need to be synced to Azure AD? Enter Y or N"
+
+if ($pathType -eq 'Y') {
+    $Path = 'OU=Service Accounts,OU=Synced,OU=Users,OU=Global,OU=APR,DC=aprenergy,DC=local'
+    Write-Host "You have chosen to SYNC this account." -ForegroundColor Green
+}
+elseif ($pathType -eq 'N') {
+    $Path = 'OU=Service Accounts,OU=NonSynced,OU=Users,OU=Global,OU=APR,DC=aprenergy,DC=local'
+    Write-Host "You have chosen NOT to SYNC this account." -ForegroundColor Green
+}
+else
+{
+    Write-Warning "Your entry is invalid. Press Enter to exit the script and re-run to try again"
+    exit
+}
+
+#######################################################################################################################################################
 #sets the ticket number
 #######################################################################################################################################################
 
@@ -155,10 +176,9 @@ $password = ConvertTo-SecureString $password -AsPlainText -Force
 
 #Set Any additional variables
 $userPrinName = $svcLogonName + "@aprenergy.local"
-$firstName = "SVC"
 $result = New-Object System.Collections.Generic.List[System.Object]
 
-New-aduser -name $svcLogonName -GivenName $firstName -Surname $accountName -DisplayName $svcLogonName -accountPassword $password  -Description $description -samaccountname $svcLogonName -UserPrincipalName $userPrinName -path $Path -Manager $managerSAM -enabled $True -OtherAttributes @{employeeType=$employeeType} -Server $server
+New-aduser -name $svcLogonName -GivenName $accountType -Surname $accountName -DisplayName $svcLogonName -accountPassword $password  -Description $description -samaccountname $svcLogonName -UserPrincipalName $userPrinName -path $Path -Manager $managerSAM -enabled $True -OtherAttributes @{employeeType=$employeeType} -Server $server
 
 Start-Sleep -Seconds 10
 
