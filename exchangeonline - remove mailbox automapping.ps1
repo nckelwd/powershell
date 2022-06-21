@@ -1,44 +1,13 @@
 Connect-ExchangeOnline
-<#
-$userEmails = {"marco.castillo@aprenergy.com",
-"richard.chavez@aprenergy.com",
-"jeron.derama@aprenergy.com",
-"wilmar.gomez@aprenergy.com",
-"antar.hammouche@aprenergy.com",
-"medardo.hernandez@aprenergy.com",
-"juan.huerta@aprenergy.com",
-"wilfredo.kaw@aprenergy.com",
-"jesus.lugo@aprenergy.com",
-"luis.miranda@aprenergy.com",
-"javier.ortega@aprenergy.com",
-"yamil.jeran.ortega@aprenergy.com",
-"romelito.perodes@aprenergy.com",
-"hector.rangel@aprenergy.com",
-"daniel.robles@aprenergy.com",
-"antonio.rodriguez@aprenergy.com",
-"laura.rodriguez@aprenergy.com",
-"arnold.sevillano@aprenergy.com",
-"miguel.tellez@aprenergy.com",
-"nirson.toj@aprenergy.com",
-"nilo.vasquez@aprenergy.com",
-"jorge.pimentel@aprenergy.com"}
-#>
-<#
-$userEmails = ("mario.barajas@aprenergy.com",
-"roberto.blanco@aprenergy.com")
-#>
 
-$userEmails = (
-"marco.castillo@aprenergy.com",
-"richard.chavez@aprenergy.com",
-"jeron.derama@aprenergy.com",
-"wilmar.gomez@aprenergy.com",
-"medardo.hernandez@aprenergy.com",
-"yamil.jeran.ortega@aprenergy.com",
-"nirson.toj@aprenergy.com",
-"jorge.pimentel@aprenergy.com"
-)
+#add the target user email address here. This is the person who has access to the mailbox and wants it/them removed
+$user = "bernardo.hobrecht@aprenergy.com"
 
-foreach ($u in $userEmails) {
-Add-MailboxPermission -Identity $u -User "Carlos.Alvarez@aprenergy.com" -AccessRights FullAccess -InheritanceType All -Automapping $false
+#enter in all the delegate email address you want to remove from the user
+$delegateEmails = ("ivan.achaga@aprenergy.com")
+
+foreach ($d in $delegateEmails) {
+Add-MailboxPermission -Identity $d -User $user -AccessRights FullAccess -InheritanceType All -Automapping $false
 }
+
+Disconnect-ExchangeOnline
