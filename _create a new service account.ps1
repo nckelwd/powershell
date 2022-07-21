@@ -7,12 +7,13 @@
 #some variables
 #######################################################################################################################################################
 $server = "aprjaxdc02.aprenergy.local"
-$Path = 'CN=Managed Service Accounts,DC=aprenergy,DC=local'
+$Path = 'OU=Service Accounts,OU=NonSynced,OU=Users,OU=Global,OU=APR,DC=aprenergy,DC=local'
 $accountType = @()
 $userCreator = $env:USERNAME
 $date = get-date
 $description =  @()
 $employeeType = 'Service Account'
+$creds = Get-Credential -Message "Enter on premis Admin Credentials"
 
 #######################################################################################################################################################
 #sets the account type
@@ -160,11 +161,11 @@ function createAccount {
     $firstName = "SVC"
     $result = New-Object System.Collections.Generic.List[System.Object]
 
-    New-aduser -name $svcLogonName -GivenName $firstName -Surname $accountName -DisplayName $svcLogonName -accountPassword $password  -Description $description -samaccountname $svcLogonName -UserPrincipalName $userPrinName -path $Path -Manager $managerSAM -enabled $True -OtherAttributes @{employeeType=$employeeType} -Server $server
+    New-aduser -name $svcLogonName -GivenName $firstName -Surname $accountName -DisplayName $svcLogonName -accountPassword $password  -Description $description -samaccountname $svcLogonName -UserPrincipalName $userPrinName -path $Path -Manager $managerSAM -enabled $True -OtherAttributes @{employeeType=$employeeType} -Server $server -Credential $creds
     
     Start-Sleep -Seconds 10
 
-    Set-ADUser $svcLogonName -Replace @{Info= 'Date: ' + $date +' Account Created by: ' + $UserCreator +' Ticket Number: ' + $TicketNumber} -Server $server
+    Set-ADUser $svcLogonName -Replace @{Info= 'Date: ' + $date +' Account Created by: ' + $UserCreator +' Ticket Number: ' + $TicketNumber} -Server $server -Credential $creds
 
     $FinalUserExistsCheck = [bool] (get-aduser -Filter{ Samaccountname -eq $svcLogonName} -server $server)
         if(!$FinalUserExistsCheck)
